@@ -32,11 +32,11 @@ function shortcode_userpic ($atts, $content=null) {
     'text' => '',
    ), $atts));
   global $wpdb;
-  $prefix = $wpdb->prefix;
+  $wprefix = $wpdb->prefix;
   // Make sure user_id is numeric
   if (!is_numeric($user_id)){ return("not found"); }
-   $userPic = $wpdb->get_var("SELECT pm.meta_value FROM Tu8tC5SU_postmeta as pm 
-            LEFT JOIN Tu8tC5SU_usermeta as um on (um.meta_value = pm.post_id)
+   $userPic = $wpdb->get_var("SELECT pm.meta_value FROM ".$wprefix."postmeta as pm 
+            LEFT JOIN ".$wprefix."usermeta as um on (um.meta_value = pm.post_id)
                 WHERE um.user_id = $user_id and pm.meta_key = '_wp_attached_file'" );
   // Default upload path is: ./wordpress/wp-content/uploads/
   return("/wordpress/wp-content/uploads/$userPic");
@@ -48,7 +48,7 @@ function shortcode_profile ($atts, $content = null) {
     'user_id' => '',
     'field' => '',), $atts));
   global $wpdb;
-  $prefix = $wpdb->prefix;
+  $wprefix = $wpdb->prefix;
   // Fields: agent_instagram, agent_linkedin, agent_twitter, agent_facebook, agent_phone, agent_your-option (organization name)
   $validfields = [
       'instagram' => 'agent_instagram',
@@ -63,14 +63,14 @@ function shortcode_profile ($atts, $content = null) {
     $pinfo = "Not Found - $field ";
     if (!is_numeric($user_id)){ return($pinfo); }
     if ($field == 'shortdesc') {
-      $pinfo = $wpdb->get_var("SELECT meta_value FROM Tu8tC5SU_usermeta WHERE user_id = $user_id and meta_key = '".$validfields[$field]."'");
+      $pinfo = $wpdb->get_var("SELECT meta_value FROM ".$wprefix."usermeta WHERE user_id = $user_id and meta_key = '".$validfields[$field]."'");
       return(substr($pinfo,0,135));
     }
     if ($field == 'email') {
-      $pinfo = $wpdb->get_var("SELECT user_email FROM Tu8tC5SU_users WHERE ID = $user_id");
+      $pinfo = $wpdb->get_var("SELECT user_email FROM ".$wprefix."users WHERE ID = $user_id");
     }
     elseif ($validfields[$field]) {
-      $pinfo = $wpdb->get_var("SELECT meta_value FROM Tu8tC5SU_usermeta WHERE user_id = $user_id and meta_key = '".$validfields[$field]."'");
+      $pinfo = $wpdb->get_var("SELECT meta_value FROM ".$wprefix."usermeta WHERE user_id = $user_id and meta_key = '".$validfields[$field]."'");
     }
   return($pinfo);
 }
