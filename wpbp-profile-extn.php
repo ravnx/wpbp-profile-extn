@@ -3,10 +3,10 @@
 Plugin Name: WP BP Profile Extension
 Plugin URI:  http://www.askmp.net/wpbp
 Description: Allows a user to get shortcodes for buddy press profile data, and some regular profile data too
-Version:     1.0.1
+Version:     1.0.2
 Author:      Michael Palmer
 Author URI:  http://www.askmp.net
-License:     GPL2 etc
+License:     GPL2 
 License URI: http://link to your plugin license
 
 Copyright 2019 Michael Palmer <michaelp@gmail.com>
@@ -32,6 +32,9 @@ function shortcode_userpic ($atts, $content=null) {
     'text' => '',
    ), $atts));
   global $wpdb;
+  $prefix = $wpdb->prefix;
+  // Make sure user_id is numeric
+  if (!is_numeric($user_id)){ return("not found"); }
    $userPic = $wpdb->get_var("SELECT pm.meta_value FROM Tu8tC5SU_postmeta as pm 
             LEFT JOIN Tu8tC5SU_usermeta as um on (um.meta_value = pm.post_id)
                 WHERE um.user_id = $user_id and pm.meta_key = '_wp_attached_file'" );
@@ -45,6 +48,7 @@ function shortcode_profile ($atts, $content = null) {
     'user_id' => '',
     'field' => '',), $atts));
   global $wpdb;
+  $prefix = $wpdb->prefix;
   // Fields: agent_instagram, agent_linkedin, agent_twitter, agent_facebook, agent_phone, agent_your-option (organization name)
   $validfields = [
       'instagram' => 'agent_instagram',
