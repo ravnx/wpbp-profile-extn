@@ -71,6 +71,9 @@ function shortcode_profile ($atts, $content = null) {
     }
     elseif ($validfields[$field]) {
       $pinfo = $wpdb->get_var("SELECT meta_value FROM ".$wprefix."usermeta WHERE user_id = $user_id and meta_key = '".$validfields[$field]."'");
+      if ($field == 'description') {
+        $pinfo = nl2br($pinfo);
+      }
     }
   return($pinfo);
 }
